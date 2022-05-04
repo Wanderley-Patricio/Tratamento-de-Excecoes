@@ -54,11 +54,9 @@ public class Programa {
       System.out.print("Informe uma quantia para sacar: ");
       double valor = scanner.nextDouble();
 
-      if(valor > conta.getLimiteSaque()){
-          System.out.println("Erro de saque: A quantia excede o limite de saque.");      
-      }
-      else if(valor > conta.getSaldo()){
-          System.out.println("Saldo insuficiente.");
+      String error = conta.validarSaque(valor);
+      if(error != null){                //se o error for diferente de nulo significa que caiu 
+          System.out.println(error);    //em uma das regras e então eu mostro a mensagem de qual erro caiu.
       }
       else{        
             conta.sacar(valor);
