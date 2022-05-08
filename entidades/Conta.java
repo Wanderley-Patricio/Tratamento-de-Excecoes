@@ -1,5 +1,7 @@
 package entidades;
 
+import exceptions.RegrasDeNegocioExceptions;
+
 public class Conta {
 
     private Integer cc;
@@ -51,24 +53,32 @@ public class Conta {
     }
 
     public void sacar(Double valor) {
+        validarSaque(valor);
         saldo -= valor;
     }
 
-    /*O que irei fazer na função abaixo é testar se o valor do saque não 
-    irá infringir alguma regra de negócio, nesse caso se o primeiro if der falso
-    eu testo o segundo if se ele também der falso eu retorno nulo indicando que 
-    a função não infringiu nenhuma das duas regras. 
-    A gambiarra nesse caso é usar a função retornando uma String com a mensagem 
-    de erro se não tiver erro a função retornará nulo. */
+    /*A função validarSaque() trabalha com uso de exceções. Essa função 
+    simplesmente lança uma exceção se acontecer algum erro, se não acontecer 
+    nenhum erro a função não faz nada.
+    - Uma boa prática ao escrever programas é ter em mente que "quanto mais 
+    complexo for o program melhor usar exceções". 
+    - No java A cláusula para lançar uma exceção é throw, na sequência instanciasse  
+    a exceção com new RuntimeException (Ex.:<throw new RuntimeException>)
+    - É importante entender que o throw assim como o return, ele corta o método. 
+    Se em algum momento der um throw, acabou, isso significa que a sua função 
+    lançou uma exceção ao invés de terminar.
+    - Criar uma exceção customizada, permite capturar exceções específicas 
+    dependendo do tratamento que se queira dar. Pode ser muito interessante 
+    principalmente em sistemas grandes.
+    */
     
-    public String validarSaque(Double valor) {
+    private void validarSaque(Double valor){
         if (valor > getLimiteSaque()) {
-            return "Erro de saque: A quantia excede o limite de saque.";
+           throw new RegrasDeNegocioExceptions("Erro de saque: A quantia excede o limite de saque.");
         }// Eu não preciso usar o else porque o return já corta a função, achou o return a função é "cortada".
         if (valor > getSaldo()) {
-           return "Erro de saque: Saldo insuficiente.";
+           throw new RegrasDeNegocioExceptions("Erro de saque: Saldo insuficiente.");
         }
-        return null;
     }
 }
 /*Da mesma forma que a aplicação (que mexe com a tela) não tem que implementar regra de negócio lá
